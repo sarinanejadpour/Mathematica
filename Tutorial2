@@ -1,0 +1,76 @@
+How define function:
+f[x_]=
+we have some examples:
+I f you wanna delete all  variables you have defined before: ClearAll["Global`*"]
+
+we have some examples:
+
+1)we wanna calculate escape velocity:
+T = (1/2) m*v^2;
+U = -GMm/r;
+energy = T + U
+sol = Solve[energy == 0, v] #it returns escape velocity.
+
+2)
+values = {G -> GravitationalConstant, r -> EarthRadius, M -> EarthMass, Newton -> Kilogram Meter/Second^2};
+v0 = v /. sol //. values          #/. for replcaing ,   //. replaces number
+v0 // PowerExpand 
+
+comment in mathematica: (* END *)
+
+3)soving differntial equation:
+eq1 = {m x''[t] == 0, m z''[t] == -m g}
+initial1 = {x[0] == 0, z[0] == 0, x[t1] == x1, z[t1] == z1};
+dsol1 = DSolve[Join[eq1, initial1], {x[t], z[t]}, t] // Flatten
+Map[Collect[#, t] &, dsol1, {2}] #tمرتب میکنه برحسب توان های 
+#now we wanna plot it:
+values1 = {x1 -> 300, z1 -> 0, g -> 9.8};
+coord1[t_, t1_] = {x[t], z[t]} /. dsol1 /. values1
+points[t1_] := Table[coord1[t, t1], {t, 0, t1, 0.5}]
+plot1[t1_] := ListPlot[points[t1] // Evaluate,PlotStyle -> {Hue[0.72, 0.5, 0.77], PointSize[0.02]}, GridLines -> Automatic]          #Evaluate leads to evaluate points[t1] instantly.
+Show[plot1[5], plot1[10], plot1[15], PlotRange -> All
+Show[%41, AxesLabel -> {HoldForm[X], HoldForm[Z]}, PlotLabel -> HoldForm[Projectile], LabelStyle -> {FontFamily -> "Forte", 14, GrayLevel[0.5]}]
+
+2)other projectile motion example: 
+eq = {m x''[t] == 0, m y''[t] == -m g};
+initial = {x[0] == x0, x'[0] == v0, y[0] == y0, y'[0] == 0}
+dsol = DSolve[Join[eq, initial], {x[t], y[t]}, t]
+{xEq, yEq} = {x[t] == x0 + vx0 t + 1/2 ax t^2, y[t] == y0 + vy0 t + 1/2 ay t^2}
+rules = {vy0 -> 0, ax -> 0, ay -> -g};
+{xEq, yEq} = {xEq, yEq} /. rules
+ySol = DSolve[yEq, y, t] // Flatten
+xSol = DSolve[xEq, x, t] // Flatten
+position[t_] := If[t < tWall, {x[t], y[t]}, {-x[t], y[t]}] /. ySol /. xSol
+tWall = t /. Solve[x[t] == 0 /. xSol, t][[1]]
+values = {x0 -> -100, g -> 9.8, y0 -> 100};
+plot[v_] := ParametricPlot[position[t] //. values /. {vx0 -> v} // Evaluate, {t, 0, 5}];       #we use parametricplot bc we have x(t) and y(t) , not x(y)!
+Show[Table[plot[v], {v, 5, 50, 5}], PlotRange -> {{-125, 0}, {0, 100}},Epilog -> {Thickness[0.02], Hue[1.], Line[{{0, 0}, {0, 100}}]}]
+
+
+
+
+
+Some useful functions:
+DeleteCases[{a, b, a}, a] #it delete a
+Cases[{a, b, a}, a]
+Position[{a, b, a}, a] #tells the indice of a
+Replace[{a, b, c}, a -> 1]
+Total[{1, 2, 3}]
+Accumulate[{1, 2, 3}]   #returns 1, 1+2, 1+2+3
+Tally[{a, b, b, c, a, a, c, b, b, c}]  #tells how many times a or b appears.
+Series[Sin[x], {x, 0, 5}]
+Apart[1/( (x + 1) (x + 2) )]  #write apart of each other
+Together[%]  
+Eliminate[{x + y == 1, x - y == 2}, y]  #eliminates y in 2 equations.
+LinearSolve[{{1, 2}, {3, 4}}, {5, 6}]
+NullSpace[{{0, 0}, {3, 4}}]
+MatrixRank[{{1, 2}, {3, 4}}]
+CharacteristicPolynomial[{{1, 2}, {3, 4}}, \[Lambda]] #returns det((A)-lambdaI)=0
+DiagonalMatrix[{1, 2, 3, 4}] #defines a diagonal matrix
+MatrixForm[%]
+IdentityMatrix[5]
+
+A = {{1, 2}, {3, 4}};
+B = {{a, b}, {c, d}};
+KroneckerProduct[A, B]   #tensor product
+MatrixForm[%]
