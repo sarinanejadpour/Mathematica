@@ -5,6 +5,27 @@ You can us it as a calculator.
 We have some quick ways: press Insert=> Typesetting=> Fraction, radical,...,RUN=Shift+Enter
  Division: N[2/3]=2./3= 0.66
 
+Symbol pi, alpha,beta,...: Esc pi Esc      Esc is the key on keyboard
+x^2 + y^2 /. {x -> 2, y -> 2}
+/. is equal what?
+Clear[y]    it deletes histry of y
+Simplify[((x^2) - 1)/x + 1]
+Exp[x]
+Expand[(x + 1) (x + 2)]    or   (x + 1) (x + 2) // Expand
+define function: 
+         f[x_] := (x^2) + 3
+ one variable equation:
+R = Solve[(x^3) - (6 x^2) + 11 x - 6 == 0, x]
+ one variable equation:
+R = Solve[(x^2) + (y^2) == 2 && x - y == 0, {x, y}]
+Integrate[f[x], x]
+Integrate[f[x], {x, 0, 2}]
+To Solve diffrential equations:
+DSolve[y''[x] + 2 y'[x] + 2 y[x] == 0, y[x], x]
+
+
+
+
 No paranthese, just []: Sin[2]=>N[Sin[2]] or Sin[2.]
 No output: x=5; or x:=5
 check the equivalence: x==y 
